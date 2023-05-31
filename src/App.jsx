@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Fifo } from "./components/Fifo";
 import { Plus, Minus, Play, Stop, Pause } from "phosphor-react";
 export function App() {
-  let remainsTime;
-  const [time, setTime] = useState(0);
+  let remindsTime, remindsHeightProcess;
+  const [time, setTime] = useState(1000);
 
   const [seconds, setSeconds] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -11,7 +11,7 @@ export function App() {
   const [processos, setProcessos] = useState([
     {
       id: 1,
-      tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
+      tamanho: 2,
     },
     {
       id: 2,
@@ -23,6 +23,7 @@ export function App() {
     },
   ]); // 1 a 4
   const [start, setStart] = useState(false);
+  const [deleteProcessPrimeiro, setDeleteProcessPrimeiro] = useState(false);
   const status = false;
 
   function handleCreateNewCycle() {
@@ -31,28 +32,51 @@ export function App() {
   function handlePauseNewCycle() {
     setStart(false);
   }
+
   useEffect(() => {
     if (start) {
-      remainsTime = setInterval(() => {
+      remindsTime = setInterval(() => {
         setSeconds(seconds + 1);
         if (seconds == 59) {
           setMinutes(minutes + 1);
           setSeconds(0);
         }
+        //handleAddProcess();
       }, 1000);
     }
-    return () => clearInterval(remainsTime);
-  }, [start, minutes, seconds, remainsTime, status]);
+    return () => clearInterval(remindsTime);
+  }, [start, minutes, seconds, remindsTime, status]);
+
+  useEffect(() => {
+    console.log(time)
+    if (start) {
+      remindsHeightProcess = setInterval(() => {
+       
+        processos[0].tamanho--;
+        setTime((time) => time - 1);
+        console.log("ok");
+        processos.forEach((process) => {
+          if (process.tamanho == 0) {
+            setDeleteProcessPrimeiro(true);
+          }
+        });
+      }, time);
+    }
+    return () => clearInterval(remindsHeightProcess);
+  }, [start, remindsHeightProcess, time, setTime]);
 
   function handleAddTime() {
-    setTime((time) => time + 1);
+    setTime((time) => time + 1000);
   }
   function handleRemoveTime() {
-    if (time > 0) setTime((time) => time - 1);
+    if (time >= 500) {
+      setTime((time) => time - 500);
+    }
   }
 
   function handleAddProcess() {
     if (processos.length < 10) {
+      console.log("ok");
       const newProcess = {
         id: processos.findLast((element) => element.id).id + 1,
         tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
@@ -63,28 +87,21 @@ export function App() {
     }
   }
 
-  function reduceHeightProcess(id) {
-    const found = processos.find((process) => process.id == id);
-    if (found.tamanho > 0) {
-      found.tamanho--;
-    }
-    return found;
-  }
-
   useEffect(() => {
-    if (start && reduceHeightProcess(1).tamanho > 0) {
-      setInterval(() => {
-        //reduceHeightProcess(1);
-        console.log("cuzil");
-      }, 1000);
+    if (deleteProcessPrimeiro) {
+      const processoZero = processos.find((processo) => processo.tamanho === 0);
+      if (processoZero) {
+        handleRemoveProcess(processoZero.id);
+      }
+      setDeleteProcessPrimeiro(false);
     }
-    return () => clearInterval();
-  }, [start, reduceHeightProcess]);
+  }, [deleteProcessPrimeiro]);
 
   function handleRemoveProcess(processoToDelete) {
     const processWithoutDeletedOne = processos.filter((processo) => {
       return processo.id !== processoToDelete;
     });
+
     setProcessos(processWithoutDeletedOne);
   }
 
@@ -127,14 +144,14 @@ export function App() {
             size={32}
             color="#dedede"
             weight="bold"
-            onClick={handleAddProcess}
+            onClick={handleAddTime}
             className="cursor-pointer dark:md:hover:bg-[#1da1f2]"
           />
           <Minus
             size={32}
             color="#dedede"
             weight="bold"
-            //onClick={() => handleRemoveProcess(3)}
+            onClick={handleRemoveTime}
             className="cursor-pointer dark:md:hover:bg-[#1da1f2]"
           />
         </div>
@@ -158,26 +175,4 @@ export function App() {
 O botão de mais vai ser para acelerar o processo com que diminui o tamanho do processo 
 O botão de menos vai ser para diminuir o processo com que diminui o tamanho do processo 
 
-
-
-
-setTimeout(() => {
-  console.log("this is the first message"); ---> demora 5 segundos para chamar a função 
-}, 5000);
-
-// criar um intervalo 
-const myInterval = setInterval(myTimer, 1000);
-function myTimer() {
-  processos.tamanho --
-}
-
-function myStop() {
-  clearInterval(myInterval);
-}
-// criar um intervalo 
-
-if(tamanho == 0){
-  myStop();
-  chamo a função de delete
-}
 */

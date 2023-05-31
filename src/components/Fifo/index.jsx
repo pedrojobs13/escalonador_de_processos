@@ -25,20 +25,3 @@ export function Fifo({ adicionarTempo, removerTempo, processos }) {
     </div>
   );
 }
-
-/*
-
- <section className="flex h-96 flex-row gap-5 px-10">
-        <div className="h-full rounded-full bg-gray-200 dark:bg-gray-700 ">
-          <div
-            className="rounded-full bg-blue-600 px-3  leading-none"
-            style={{ height: `${adicionarTempo}%` }}
-          >
-            <div className="p-0.5 pt-2.5 text-base font-semibold text-blue-100 ">
-              {adicionarTempo}%
-            </div>
-          </div>
-        </div>
-      </section>
-
-*/
