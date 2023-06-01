@@ -36,25 +36,23 @@ export function App() {
   useEffect(() => {
     if (start) {
       remindsTime = setInterval(() => {
+
         setSeconds(seconds + 1);
         if (seconds == 59) {
           setMinutes(minutes + 1);
           setSeconds(0);
         }
-        //handleAddProcess();
+        handleAddProcess();
       }, 1000);
     }
     return () => clearInterval(remindsTime);
   }, [start, minutes, seconds, remindsTime, status]);
 
   useEffect(() => {
-    console.log(time)
     if (start) {
       remindsHeightProcess = setInterval(() => {
-       
         processos[0].tamanho--;
-        setTime((time) => time - 1);
-        console.log("ok");
+
         processos.forEach((process) => {
           if (process.tamanho == 0) {
             setDeleteProcessPrimeiro(true);
@@ -63,28 +61,28 @@ export function App() {
       }, time);
     }
     return () => clearInterval(remindsHeightProcess);
-  }, [start, remindsHeightProcess, time, setTime]);
+  }, [start, remindsHeightProcess, setDeleteProcessPrimeiro, processos, handleRemoveTime, handleAddTime]);
 
   function handleAddTime() {
-    setTime((time) => time + 1000);
+    setTime((time) => time + 100);
   }
   function handleRemoveTime() {
-    if (time >= 500) {
-      setTime((time) => time - 500);
-    }
+
+    setTime((time) => time - 100);
+
   }
 
   function handleAddProcess() {
     if (processos.length < 10) {
-      console.log("ok");
+
       const newProcess = {
         id: processos.findLast((element) => element.id).id + 1,
         tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
       };
       setProcessos((state) => [...state, newProcess]);
-
-      //sempre lembrar de clousore
     }
+    //sempre lembrar de clousore
+
   }
 
   useEffect(() => {
@@ -106,12 +104,27 @@ export function App() {
   }
 
   function handleRestartProcesso() {
-    setTime(20);
-    setProcessos(...processos);
+    setTime(1000);
+    setProcessos(
+      [
+        {
+          id: 1,
+          tamanho: 2,
+        },
+        {
+          id: 2,
+          tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
+        },
+        {
+          id: 3,
+          tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
+        },
+      ]
+    )
     setMinutes(0);
     setSeconds(0);
     setStart(false);
-    clearInterval(remainsTime);
+    clearInterval(remindsTime);
   }
 
   return (
