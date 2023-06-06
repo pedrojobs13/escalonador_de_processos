@@ -1,7 +1,8 @@
 import { createContext } from "react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const TimeContext = createContext();
+
 
 export function TimeContextProvider({ children }) {
   let remindsTime;
@@ -13,7 +14,7 @@ export function TimeContextProvider({ children }) {
   const [processos, setProcessos] = useState([
     {
       id: 1,
-      tamanho: 2,
+      tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
     },
     {
       id: 2,
@@ -23,9 +24,21 @@ export function TimeContextProvider({ children }) {
       id: 3,
       tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
     },
+    {
+      id: 4,
+      tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
+    },
+    {
+      id: 5,
+      tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
+    },
+    {
+      id: 6,
+      tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
+    },
   ]); // 1 a 4
   const [start, setStart] = useState(false);
-  const [accessProcess, setAccessProcess] = useState("FIFO");
+
   const status = false;
 
   function handleCreateNewCycle() {
@@ -59,7 +72,7 @@ export function TimeContextProvider({ children }) {
     setProcessos([
       {
         id: 1,
-        tamanho: 2,
+        tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
       },
       {
         id: 2,
@@ -84,13 +97,21 @@ export function TimeContextProvider({ children }) {
     setProcessos(processWithoutDeletedOne);
   }
   function handleAddProcess() {
-    if (processos.length < 10) {
+
+    var processIdDuplicate = processos.map(function (item) { return item.id });
+    var isDuplicate = processIdDuplicate.some(function (item, idx) {
+      return processIdDuplicate.indexOf(item) != idx
+    });
+
+    if (processos.length < 10 && !isDuplicate) {
       const newProcess = {
         id: processos.findLast((element) => element.id).id + 1,
         tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
       };
       setProcessos((state) => [...state, newProcess]);
     }
+    // número aletório pra caso de merda -> Math.floor(Math.random() * 65536);
+
     //sempre lembrar de clousore
   }
 
