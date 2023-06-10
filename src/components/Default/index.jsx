@@ -1,7 +1,7 @@
 import { useContext} from "react";
 import { Plus, Minus, Play, Stop, Pause } from "phosphor-react";
 import { TimeContext } from "../../contexts/TimeContext";
-
+import { NavLink } from "react-router-dom";
 export function Default() {
   const {
     handleCreateNewCycle,
@@ -14,7 +14,7 @@ export function Default() {
     seconds,
   } = useContext(TimeContext);
   return (
-    <div className="h-screen bg-zinc-800 text-zinc-50">
+    <>
       <main className=" flex w-full flex-col items-center  pt-4 text-2xl">
         Escalonador de Processos
         <div className="flex gap-5">
@@ -83,6 +83,17 @@ export function Default() {
         );
       })}
     </div>
-    </div>
+    <nav>
+        <NavLink to="/" title="Timer" className="m-40">
+          Fifo
+        </NavLink>
+        <NavLink to="/Sjf" title="Histórico" className="m-40">
+          SJF
+        </NavLink>
+        <NavLink to="/str" title="Histórico">
+          STR
+        </NavLink>
+      </nav>
+    </>
   );
 }

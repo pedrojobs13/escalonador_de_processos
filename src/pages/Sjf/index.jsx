@@ -7,31 +7,24 @@ import { TimeContext } from "../../contexts/TimeContext"; export function Sjf() 
     processos,
     time,
   } = useContext(TimeContext);
+
+
   const [deleteProcessPrimeiro, setDeleteProcessPrimeiro] = useState(false);
-
+  const [letTheFirstIndex, setLetTheFirstIndex] = useState(true);
+  const [startIndex, setStartIndex] = useState()
   let remindsHeightProcess;
-
-
+  console.log(startIndex)
 
   useEffect(() => {
-
-
-    const min = processos.reduce(function (prev, current) {
-      return prev.tamanho < current.tamanho ? prev : current;
-    })
-    const minTam = min.tamanho
-    const index = processos.findIndex(x => x.tamanho === minTam)
-
-
     if (start) {
       remindsHeightProcess = setInterval(() => {
-        processos[index].tamanho--;
-        setDeleteProcessPrimeiro(processos[index].tamanho === 0);
+        processos[startIndex].tamanho--;
+        setDeleteProcessPrimeiro(processos[startIndex].tamanho === 0);
       }, time);
     }
 
     return () => clearInterval(remindsHeightProcess);
-  }, [start, time, processos]);
+  }, [start, time, processos, startIndex]);
 
   useEffect(() => {
     if (deleteProcessPrimeiro) {
@@ -39,9 +32,23 @@ import { TimeContext } from "../../contexts/TimeContext"; export function Sjf() 
       if (processoZero) {
         handleRemoveProcess(processoZero.id);
       }
-      setDeleteProcessPrimeiro(false);
+      setDeleteProcessPrimeiro(false)
     }
   }, [deleteProcessPrimeiro]);
+
+
+  useEffect(() => {
+    if (!deleteProcessPrimeiro) {
+      const min = processos.reduce(function (prev, current) {
+        return prev.tamanho < current.tamanho ? prev : current;
+      })
+      const minTam = min.tamanho
+      const index = processos.findIndex(x => x.tamanho === minTam)
+      setStartIndex(index)
+    }
+
+  }, [deleteProcessPrimeiro])
+
 
   return <footer>sjf</footer>;
 }
