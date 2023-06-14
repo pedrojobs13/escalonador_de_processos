@@ -1,4 +1,4 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import { Plus, Minus, Play, Stop, Pause } from "phosphor-react";
 import { TimeContext } from "../../contexts/TimeContext";
 import { NavLink } from "react-router-dom";
@@ -63,35 +63,38 @@ export function Default() {
       </main>
 
       <div className="mt-10 flex">
-      {processos.map((processo) => {
-        return (
-          <div className="flex flex-col" key={processo.id}>
-            <span className="text-center">{processo.id}</span>
-            <section className="h-96 flex-row gap-5 px-10">
-              <div className="h-full rounded-full bg-gray-200 dark:bg-gray-700 ">
-                <div
-                  className="rounded-full bg-[#1da1f2] px-3  leading-none"
-                  style={{ height: `${processo.tamanho}%` }}
-                >
-                  <div className="p-0.5 pt-2.5 text-base font-semibold text-blue-100 ">
-                    {processo.tamanho}
+        {processos.map((processo) => {
+          return (
+            <div className="flex flex-col" key={processo.id}>
+              <span className="text-center">{processo.id}</span>
+              <section className="h-96 flex-row gap-5 px-10">
+                <div className="h-full rounded-full bg-gray-200 dark:bg-gray-700 ">
+                  <div
+                    className="rounded-full bg-[#1da1f2] px-3  leading-none"
+                    style={{ height: `${processo.tamanho}%` }}
+                  >
+                    <div className="p-0.5 pt-2.5 text-base font-semibold text-blue-100 ">
+                      {processo.tamanho}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
-          </div>
-        );
-      })}
-    </div>
-    <nav>
-        <NavLink to="/" title="Timer" className="m-40">
+              </section>
+            </div>
+          );
+        })}
+      </div>
+      <nav className="flex justify-center gap-3 mt-6">
+        <NavLink to="/" title="Timer" className="px-11 py-3 bg-[#1da1f2] rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-75 transition-transform">
           Fifo
         </NavLink>
-        <NavLink to="/Sjf" title="Histórico" className="m-40">
+        <NavLink to="/Sjf" title="Histórico" className="px-11 py-3 bg-[#1da1f2] rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-75 transition-transform">
           SJF
         </NavLink>
-        <NavLink to="/str" title="Histórico">
+        <NavLink to="/str" title="Histórico" className="px-11 py-3 bg-[#1da1f2] rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-75 transition-transform">
           STR
+        </NavLink>
+        <NavLink to="/round" title="Histórico" className="px-11 py-3 bg-[#1da1f2] rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-75 transition-transform">
+          Round
         </NavLink>
       </nav>
     </>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useContext } from "react";
-import { TimeContext } from "../../contexts/TimeContext"; export function Sjf() {
+import { TimeContext } from "../../contexts/TimeContext";
+export function Sjf() {
   const {
     start,
     handleRemoveProcess,
