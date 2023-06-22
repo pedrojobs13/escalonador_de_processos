@@ -2,19 +2,16 @@ import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { TimeContext } from "../../contexts/TimeContext";
 export function Sjf() {
-  const {
-    start,
-    handleRemoveProcess,
-    processos,
-    time,
-  } = useContext(TimeContext);
-
+  const { start, handleRemoveProcess, processos, time, setIsTicketTrue } =
+    useContext(TimeContext);
 
   const [deleteProcessPrimeiro, setDeleteProcessPrimeiro] = useState(false);
   const [letTheFirstIndex, setLetTheFirstIndex] = useState(true);
-  const [startIndex, setStartIndex] = useState()
+  const [startIndex, setStartIndex] = useState();
   let remindsHeightProcess;
-  console.log(startIndex)
+  useEffect(() => {
+    setIsTicketTrue(false);
+  }, []);
 
   useEffect(() => {
     if (start) {
@@ -33,23 +30,20 @@ export function Sjf() {
       if (processoZero) {
         handleRemoveProcess(processoZero.id);
       }
-      setDeleteProcessPrimeiro(false)
+      setDeleteProcessPrimeiro(false);
     }
   }, [deleteProcessPrimeiro]);
-
 
   useEffect(() => {
     if (!deleteProcessPrimeiro) {
       const min = processos.reduce(function (prev, current) {
         return prev.tamanho < current.tamanho ? prev : current;
-      })
-      const minTam = min.tamanho
-      const index = processos.findIndex(x => x.tamanho === minTam)
-      setStartIndex(index)
+      });
+      const minTam = min.tamanho;
+      const index = processos.findIndex((x) => x.tamanho === minTam);
+      setStartIndex(index);
     }
-
-  }, [deleteProcessPrimeiro])
-
+  }, [deleteProcessPrimeiro]);
 
   return <footer>sjf</footer>;
 }

@@ -1,43 +1,31 @@
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { TimeContext } from "../../contexts/TimeContext";
-export function Fifo() {
-  const {
-    start,
-    handleRemoveProcess,
-    handleAddTime,
-    handleRemoveTime,
-    processos,
-    time,
-    setIsTicketTrue,
-  } = useContext(TimeContext);
+export function Priorities() {
+  const { start, handleRemoveProcess, processos, time, setIsTicketTrue } =
+    useContext(TimeContext);
   const [deleteProcessPrimeiro, setDeleteProcessPrimeiro] = useState(false);
+
   let remindsHeightProcess;
   useEffect(() => {
-    setIsTicketTrue(false);
-  }, []);
-
+    setIsTicketTrue(true);
+  }, [])
   useEffect(() => {
+    const max = processos.reduce(function (prev, current) {
+      return prev.prioridade > current.prioridade ? prev : current;
+    });
+    const maxPri = max.prioridade;
+    const index = processos.findIndex((x) => x.prioridade === maxPri);
+
     if (start) {
       remindsHeightProcess = setInterval(() => {
-        processos[0].tamanho--;
-
-        processos.forEach((process) => {
-          if (process.tamanho == 0) {
-            setDeleteProcessPrimeiro(true);
-          }
-        });
+        processos[index].tamanho--;
+        setDeleteProcessPrimeiro(processos[index].tamanho === 0);
       }, time);
     }
+
     return () => clearInterval(remindsHeightProcess);
-  }, [
-    start,
-    remindsHeightProcess,
-    setDeleteProcessPrimeiro,
-    processos,
-    handleRemoveTime,
-    handleAddTime,
-  ]);
+  }, [start, time, processos]);
 
   useEffect(() => {
     if (deleteProcessPrimeiro) {
@@ -49,5 +37,5 @@ export function Fifo() {
     }
   }, [deleteProcessPrimeiro]);
 
-  return <footer>FIFO</footer>;
+  return <footer>Priorities</footer>;
 }

@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { TimeContext } from "../../contexts/TimeContext";
 export function Str() {
-  const { start, handleRemoveProcess, processos, time } =
+  const { start, handleRemoveProcess, processos, time, setIsTicketTrue } =
     useContext(TimeContext);
   const [deleteProcessPrimeiro, setDeleteProcessPrimeiro] = useState(false);
 
   let remindsHeightProcess;
-
+  useEffect(() => {
+    setIsTicketTrue(false);
+  }, []);
   useEffect(() => {
     const min = processos.reduce(function (prev, current) {
       return prev.tamanho < current.tamanho ? prev : current;
@@ -35,5 +37,5 @@ export function Str() {
     }
   }, [deleteProcessPrimeiro]);
 
-  return <footer>STF</footer>;
+  return <footer>STR</footer>;
 }

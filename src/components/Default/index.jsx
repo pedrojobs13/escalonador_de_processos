@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Plus, Minus, Play, Stop, Pause } from "phosphor-react";
+import { Plus, Minus, Play, Stop, Pause, ArrowLeft } from "phosphor-react";
 import { TimeContext } from "../../contexts/TimeContext";
 import { NavLink } from "react-router-dom";
 export function Default() {
@@ -12,6 +12,7 @@ export function Default() {
     minutes,
     processos,
     seconds,
+    isTicketTrue,
   } = useContext(TimeContext);
   return (
     <>
@@ -66,6 +67,14 @@ export function Default() {
         {processos.map((processo) => {
           return (
             <div className="flex flex-col" key={processo.id}>
+              {isTicketTrue ? (
+                <p className="divide-x border-2 border-[#1da1f2] text-center text-red-600">
+                  {processo.prioridade}
+                </p>
+              ) : (
+                ""
+              )}
+
               <span className="text-center">{processo.id}</span>
               <section className="h-96 flex-row gap-5 px-10">
                 <div className="h-full rounded-full bg-gray-200 dark:bg-gray-700 ">
@@ -82,19 +91,52 @@ export function Default() {
             </div>
           );
         })}
+        {isTicketTrue ?  <span className="text-base">
+          <ArrowLeft
+            size={28}
+            color="#1da1f2"
+            weight="light"
+            className="mx-3 inline"
+          />
+          Ordem de prioridade
+        </span> : ""}
+       
       </div>
-      <nav className="flex justify-center gap-3 mt-6">
-        <NavLink to="/" title="Timer" className="px-11 py-3 bg-[#1da1f2] rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-75 transition-transform">
+      <nav className="mt-6 flex justify-center gap-3">
+        <NavLink
+          to="/"
+          title="Timer"
+          className="transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 active:scale-75"
+        >
           Fifo
         </NavLink>
-        <NavLink to="/Sjf" title="Histórico" className="px-11 py-3 bg-[#1da1f2] rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-75 transition-transform">
+        <NavLink
+          to="/Sjf"
+          title="Histórico"
+          className="transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 active:scale-75"
+        >
           SJF
         </NavLink>
-        <NavLink to="/str" title="Histórico" className="px-11 py-3 bg-[#1da1f2] rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-75 transition-transform">
+        <NavLink
+          to="/str"
+          title="Histórico"
+          className="transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 active:scale-75"
+        >
           STR
         </NavLink>
-        <NavLink to="/round" title="Histórico" className="px-11 py-3 bg-[#1da1f2] rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-75 transition-transform">
+        <NavLink
+          to="/round"
+          title="Histórico"
+          className="transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 active:scale-75"
+        >
           Round
+        </NavLink>
+        <NavLink
+          to="/priorities"
+          title="Histórico"
+          className="transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 active:scale-75"
+        >
+          Priorities
         </NavLink>
       </nav>
     </>

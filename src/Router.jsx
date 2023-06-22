@@ -5,6 +5,7 @@ import { Sjf } from "./pages/Sjf";
 import { DefaultLayout } from "./layouts/DefaultLayout";
 import { Str } from "./pages/Str";
 import { Round } from "./pages/Round";
+import { Priorities } from "./pages/Priorities";
 
 export function Router() {
   return (
@@ -14,6 +15,7 @@ export function Router() {
         <Route path="/sjf" element={<Sjf />} />
         <Route path="/str" element={<Str />} />
         <Route path="/round" element={<Round />} />
+        <Route path="/priorities" element={<Priorities />} />
       </Route>
     </Routes>
   );
