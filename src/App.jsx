@@ -5,7 +5,7 @@ export function App() {
   return (
     <BrowserRouter>
       <TimeContextProvider>
-        <div className="h-screen bg-zinc-800 text-zinc-50">
+        <div className="subpixel-antialiased  lg:h-full bg-zinc-800 text-zinc-50">
           <Router />
         </div>
       </TimeContextProvider>

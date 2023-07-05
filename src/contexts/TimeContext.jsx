@@ -6,36 +6,72 @@ export const TimeContext = createContext();
 export function TimeContextProvider({ children }) {
   let remindsTime;
   const [time, setTime] = useState(1000);
-  const [isTicketTrue, setIsTicketTrue] = useState(false);
+  const [isPrioritiesTrue, setIsTicketTrue] = useState(false);
+  const [isLotteryIsTrue, setIsLotteryIsTrue] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [minutes, setMinutes] = useState(0);
-
+  const [getPrioridade, setGetPrioridade] = useState(Calcprioridade());
+  const [getNewPrioridade, setGetNewPrioridade] = useState(Calcprioridade());
+  const [isFairShareTrue, setIsFairShareTrue] = useState(false)
+  const ticketValue = {
+    4: 30,
+    3: 15,
+    2: 8,
+    1: 3,
+  }
   const [processos, setProcessos] = useState([
     {
       id: 1,
       tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
-      prioridade: Math.floor(Math.random() * (4 - 1 + 1)) + 1,
-      ticket: 1,
+      prioridade: getPrioridade,
+      ticket: ticketValue[getPrioridade],
     },
     {
       id: 2,
       tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
-      prioridade: Math.floor(Math.random() * (4 - 1 + 1)) + 1,
-      ticket: 1,
+      prioridade: getNewPrioridade,
+      ticket: ticketValue[getNewPrioridade],
     },
     {
       id: 3,
       tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
-      prioridade: Math.floor(Math.random() * (4 - 1 + 1)) + 1,
-      ticket: 1,
+      prioridade: getPrioridade,
+      ticket: ticketValue[getPrioridade],
     },
     {
       id: 4,
       tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
-      prioridade: Math.floor(Math.random() * (4 - 1 + 1)) + 1,
-      ticket: 1,
+      prioridade: getNewPrioridade,
+      ticket: ticketValue[getNewPrioridade],
     },
   ]); // 1 a 4
+  const [newProcessos, setNewProcessos] = useState([
+    {
+      id: 1,
+      tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
+      prioridade: getPrioridade,
+      ticket: ticketValue[getPrioridade],
+    },
+    {
+      id: 2,
+      tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
+      prioridade: getNewPrioridade,
+      ticket: ticketValue[getNewPrioridade],
+    },
+    {
+      id: 3,
+      tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
+      prioridade: getPrioridade,
+      ticket: ticketValue[getPrioridade],
+    },
+    {
+      id: 4,
+      tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
+      prioridade: getNewPrioridade,
+      ticket: ticketValue[getNewPrioridade],
+    },
+  ]); // 1 a 4
+
   const [start, setStart] = useState(false);
 
   const status = false;
@@ -72,26 +108,26 @@ export function TimeContextProvider({ children }) {
       {
         id: 1,
         tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
-        prioridade: Math.floor(Math.random() * (4 - 1 + 1)) + 1,
-        ticket: 1,
+        prioridade: getPrioridade,
+        ticket: ticketValue[getPrioridade],
       },
       {
         id: 2,
         tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
-        prioridade: Math.floor(Math.random() * (4 - 1 + 1)) + 1,
-        ticket: 1,
+        prioridade: getNewPrioridade,
+        ticket: ticketValue[getNewPrioridade],
       },
       {
         id: 3,
         tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
-        prioridade: Math.floor(Math.random() * (4 - 1 + 1)) + 1,
-        ticket: 1,
+        prioridade: getPrioridade,
+        ticket: ticketValue[getPrioridade],
       },
       {
         id: 4,
         tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
-        prioridade: 1,
-        ticket: 1,
+        prioridade: getNewPrioridade,
+        ticket: ticketValue[getNewPrioridade],
       },
     ]);
     setMinutes(0);
@@ -116,17 +152,21 @@ export function TimeContextProvider({ children }) {
     });
 
     if (processos.length < 10 && !isDuplicate) {
+      setGetPrioridade(Calcprioridade())
       const newProcess = {
         id: processos.findLast((element) => element.id).id + 1,
         tamanho: Math.floor(Math.random() * (100 - 5 + 1)) + 5,
-        prioridade: Math.floor(Math.random() * (4 - 1 + 1)) + 1,
-        ticket: 1,
+        prioridade: getPrioridade,
+        ticket: ticketValue[getPrioridade],
       };
       setProcessos((state) => [...state, newProcess]);
     }
     // número aletório pra caso de merda -> Math.floor(Math.random() * 65536);
 
     //sempre lembrar de clousore
+  }
+  function Calcprioridade() {
+    return Math.floor(Math.random() * (4 - 1 + 1)) + 1
   }
 
   return (
@@ -143,8 +183,13 @@ export function TimeContextProvider({ children }) {
         start,
         handleRemoveProcess,
         time,
-        isTicketTrue,
+        isTicketTrue: isPrioritiesTrue,
         setIsTicketTrue,
+        isLotteryIsTrue,
+        setIsLotteryIsTrue,
+        setIsFairShareTrue,
+        isFairShareTrue,
+        newProcessos
       }}
     >
       {children}

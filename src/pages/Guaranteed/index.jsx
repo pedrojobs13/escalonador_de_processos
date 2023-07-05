@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { TimeContext } from "../../contexts/TimeContext";
 
-export function Round() {
+export function Guaranteed() {
   const {
     start,
     handleRemoveProcess,
@@ -11,16 +11,28 @@ export function Round() {
     processos,
     time,
     setIsTicketTrue,
+    setIsLotteryIsTrue,
     setIsFairShareTrue
   } = useContext(TimeContext);
+
   const [deleteProcessPrimeiro, setDeleteProcessPrimeiro] = useState(false);
+
   const [secondsRound, setSecondsRound] = useState(0);
+  const prioridades = {
+    4: 20,
+    3: 15,
+    2: 10,
+    1: 5,
+  };
   useEffect(() => {
-    setIsTicketTrue(false);
+    setIsTicketTrue(true);
+    setIsLotteryIsTrue(false)
     setIsFairShareTrue(false)
   }, []);
+
   let remindsHeightProcess;
   let remindsTimeFromRound;
+
 
   useEffect(() => {
     if (start) {
@@ -42,61 +54,53 @@ export function Round() {
     handleAddTime,
   ]);
 
+
   useEffect(() => {
     if (start) {
-      let isDeleteProcessPrimeiro = deleteProcessPrimeiro;
-
       remindsTimeFromRound = setInterval(() => {
 
-        if (!isDeleteProcessPrimeiro) {
-          setSecondsRound((prevTime) => prevTime + 1);
+        const prioridade = processos[secondsRound]?.prioridade;
+        const valor = prioridades[prioridade];
+
+        if (prioridade !== undefined) {
+          processos[secondsRound].tamanho = processos[secondsRound].tamanho - valor;
         }
 
-        if (processos[secondsRound]) {
-          if (processos[secondsRound].tamanho === undefined) {
-            setSecondsRound(0);
-          } else {
-            processos[secondsRound].tamanho = processos[secondsRound].tamanho - 10;
-          }
-        }
+        setSecondsRound((prevSecondsRound) => prevSecondsRound + 1);
 
-        if (secondsRound === 9) {
+        if (secondsRound == 9) {
           setSecondsRound(0);
         }
 
         processos.forEach((process) => {
           if (process.tamanho <= 0) {
-            isDeleteProcessPrimeiro = true;
+            setDeleteProcessPrimeiro(true);
           }
         });
 
-        if (isDeleteProcessPrimeiro) {
-          setDeleteProcessPrimeiro(true);
-        }
       }, 1000);
     }
     return () => clearInterval(remindsTimeFromRound);
-  }, [start, secondsRound, remindsTimeFromRound, setSecondsRound, processos, deleteProcessPrimeiro]);
+  }, [start, remindsTimeFromRound, processos, secondsRound, setDeleteProcessPrimeiro]);
 
   useEffect(() => {
     if (deleteProcessPrimeiro) {
       const processoZero = processos.find((processo) => processo.tamanho <= 0);
       if (processoZero) {
         handleRemoveProcess(processoZero.id);
-        setSecondsRound((prevTime) => prevTime - 1);
       }
       setDeleteProcessPrimeiro(false);
+      setSecondsRound((prevSecondsRound) => prevSecondsRound - 1)
     }
-  }, [deleteProcessPrimeiro, processos, handleRemoveProcess]);
-
+  }, [deleteProcessPrimeiro, setSecondsRound]);
 
   return <footer className="flex p-2 px-8 space-y-4 flex-col items-center">
-    <h2 className="text-3xl	">Escalonamento por Chaveamento Circular</h2>
+    <h2 className="text-3xl	">Escalonamento Garantido</h2>
     <p className="text-justify text-xl">
-      O escalonamento por chaveamento circular (também conhecido como Round-Robin) é um algoritmo de escalonamento de processos em um sistema operacional. Nesse algoritmo, cada processo recebe uma fatia de tempo para execução em uma ordem circular.
+      O escalonamento garantido (Guaranteed Scheduling) é um tipo de escalonamento de processos que visa fornecer garantias de tempo de execução para determinados processos ou tarefas em sistemas operacionais em tempo real.
     </p>
     <p className="text-justify text-xl">
-      A principal vantagem do escalonamento por chaveamento circular é que ele garante uma distribuição justa do tempo de processamento entre os processos. Cada processo recebe uma fatia igual de tempo antes de ser colocado novamente no final da fila. Isso é especialmente útil em ambientes de multiprogramação, onde vários processos estão competindo pelo tempo de CPU.
+      A ideia básica por trás do escalonamento garantido é assegurar que processos críticos ou tarefas com requisitos temporais específicos sejam concluídos dentro de prazos definidos, independentemente do comportamento dos demais processos do sistema. Isso é crucial em sistemas operacionais em tempo real, onde a perda de prazos pode ter consequências graves, como falhas em sistemas de controle, sistemas de segurança ou sistemas embarcados.
     </p>
-  </footer>;
+  </footer>
 }

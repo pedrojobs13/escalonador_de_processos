@@ -2,6 +2,8 @@ import { useContext } from "react";
 import { Plus, Minus, Play, Stop, Pause, ArrowLeft } from "phosphor-react";
 import { TimeContext } from "../../contexts/TimeContext";
 import { NavLink } from "react-router-dom";
+import { Gauge } from "../Gauge";
+
 export function Default() {
   const {
     handleCreateNewCycle,
@@ -13,6 +15,10 @@ export function Default() {
     processos,
     seconds,
     isTicketTrue,
+    isLotteryIsTrue,
+    setIsLotteryIsTrue,
+    isFairShareTrue,
+    newProcessos
   } = useContext(TimeContext);
   return (
     <>
@@ -55,6 +61,7 @@ export function Default() {
             className="cursor-pointer dark:md:hover:bg-[#1da1f2]"
           />
         </div>
+
         <div className="flex ">
           <span className="px-2">Tempo: </span>{" "}
           <span>{minutes < 10 ? `0${minutes}` : minutes}</span>:
@@ -62,19 +69,27 @@ export function Default() {
           <div className="px-4">processos: {processos.length}</div>
         </div>
       </main>
-
+      <Gauge />
       <div className="mt-10 flex">
+
         {processos.map((processo) => {
           return (
             <div className="flex flex-col" key={processo.id}>
               {isTicketTrue ? (
-                <p className="divide-x border-2 border-[#1da1f2] text-center text-red-600">
+                <p className="divide-x border-2 ml-1 border-[#065086] text-center text-red-600 pr-1">
                   {processo.prioridade}
                 </p>
               ) : (
                 ""
               )}
+              {
+                isTicketTrue && isLotteryIsTrue ? (
+                  <p className="divide-x border-2 ml-1 border-[#065086] text-center text-red-600 pr-1 mt-2">
+                    {processo.ticket}
+                  </p>
+                ) : ("")
 
+              }
               <span className="text-center">{processo.id}</span>
               <section className="h-96 flex-row gap-5 px-10">
                 <div className="h-full rounded-full bg-gray-200 dark:bg-gray-700 ">
@@ -91,52 +106,155 @@ export function Default() {
             </div>
           );
         })}
-        {isTicketTrue ?  <span className="text-base">
-          <ArrowLeft
-            size={28}
-            color="#1da1f2"
-            weight="light"
-            className="mx-3 inline"
-          />
-          Ordem de prioridade
-        </span> : ""}
-       
-      </div>
+
+        {
+          isFairShareTrue ? (
+            newProcessos.map((processo) => {
+              return (
+                <div className="flex flex-col" key={processo.id}>
+                  {isTicketTrue ? (
+                    <p className="divide-x border-2 ml-1 border-[#ffff] text-center text-red-600 pr-1">
+                      {processo.prioridade}
+                    </p>
+                  ) : (
+                    ""
+                  )}
+                  {
+                    isTicketTrue && isLotteryIsTrue ? (
+                      <p className="divide-x border-2 ml-1 border-[#065086] text-center text-red-600 pr-1 mt-2">
+                        {processo.ticket}
+                      </p>
+                    ) : ("")
+                  }
+                  <span className="text-center">{processo.id}</span>
+                  <section className="h-96 flex-row gap-5 px-10">
+                    <div className="h-full rounded-full bg-gray-200 dark:bg-gray-700 ">
+                      <div
+                        className="rounded-full bg-[#f21d80] px-3  leading-none"
+                        style={{ height: `${processo.tamanho}%` }}
+                      >
+                        <div className="p-0.5 pt-2.5 text-base font-semibold text-blue-100 ">
+                          {processo.tamanho}
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              );
+            })
+          ) : ("")
+        }
+
+        <div className="flex flex-col">
+          {isTicketTrue ?
+
+            <span className="text-base">
+              <ArrowLeft
+                size={28}
+                color="#1da1f2"
+                weight="light"
+                className="mx-3 inline"
+              />
+              Ordem de prioridade
+            </span>
+            :
+            ""
+          }
+          {
+            isLotteryIsTrue && isTicketTrue ?
+              <span className="text-base mt-2">
+                <ArrowLeft
+                  size={28}
+                  color="#1da1f2"
+                  weight="light"
+                  className="mx-3 inline"
+                />
+                Tickets
+              </span> : ""
+          }
+
+        </div>
+      </div >
       <nav className="mt-6 flex justify-center gap-3">
         <NavLink
           to="/"
-          title="Timer"
-          className="transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 active:scale-75"
+          title="Fifo"
+          className={({ isActive }) =>
+            isActive ? "transform rounded-md bg-[#ce0707] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 " :
+              "transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 "
+          }
         >
           Fifo
         </NavLink>
         <NavLink
           to="/Sjf"
-          title="Histórico"
-          className="transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 active:scale-75"
+          title="SJF"
+          className={({ isActive }) =>
+            isActive ? "transform rounded-md bg-[#ce0707] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 " :
+              "transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 "
+          }
         >
           SJF
         </NavLink>
         <NavLink
           to="/str"
-          title="Histórico"
-          className="transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 active:scale-75"
+          title="STR"
+          className={({ isActive }) =>
+            isActive ? "transform rounded-md bg-[#ce0707] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 " :
+              "transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 "
+          }
         >
           STR
         </NavLink>
         <NavLink
           to="/round"
-          title="Histórico"
-          className="transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 active:scale-75"
+          title="Round"
+          className={({ isActive }) =>
+            isActive ? "transform rounded-md bg-[#ce0707] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 " :
+              "transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 "
+          }
         >
           Round
         </NavLink>
         <NavLink
           to="/priorities"
-          title="Histórico"
-          className="transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 active:scale-75"
+          title="Priorities"
+          className={({ isActive }) =>
+            isActive ? "transform rounded-md bg-[#ce0707] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 " :
+              "transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 "
+          }
         >
           Priorities
+        </NavLink>
+        <NavLink
+          to="/guaranteed"
+          title="Guaranteed"
+          className={({ isActive }) =>
+            isActive ? "transform rounded-md bg-[#ce0707] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 " :
+              "transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 "
+          }
+        >
+          Guaranteed
+        </NavLink>
+        <NavLink
+          to="/lottery"
+          title="Lottery"
+          className={({ isActive }) =>
+            isActive ? "transform rounded-md bg-[#ce0707] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 " :
+              "transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 "
+          }
+        >
+          Lottery
+        </NavLink>
+        <NavLink
+          to="/fairshare"
+          title="FairShare"
+          className={({ isActive }) =>
+            isActive ? "transform rounded-md bg-[#ce0707] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 " :
+              "transform rounded-md bg-[#1da1f2] px-11 py-3 text-white shadow-lg outline-none transition-transform focus:ring-4 "
+          }
+        >
+          FairShare
         </NavLink>
       </nav>
     </>

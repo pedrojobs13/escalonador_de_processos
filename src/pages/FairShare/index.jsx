@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { TimeContext } from "../../contexts/TimeContext";
 
-export function Round() {
+export function FairShare() {
   const {
     start,
     handleRemoveProcess,
@@ -11,16 +11,28 @@ export function Round() {
     processos,
     time,
     setIsTicketTrue,
+    setIsLotteryIsTrue,
     setIsFairShareTrue
   } = useContext(TimeContext);
+
   const [deleteProcessPrimeiro, setDeleteProcessPrimeiro] = useState(false);
+
   const [secondsRound, setSecondsRound] = useState(0);
+  const prioridades = {
+    4: 20,
+    3: 15,
+    2: 10,
+    1: 5,
+  };
   useEffect(() => {
-    setIsTicketTrue(false);
-    setIsFairShareTrue(false)
+    setIsTicketTrue(true);
+    setIsLotteryIsTrue(false)
+    setIsFairShareTrue(true)
   }, []);
+
   let remindsHeightProcess;
   let remindsTimeFromRound;
+
 
   useEffect(() => {
     if (start) {
@@ -42,61 +54,55 @@ export function Round() {
     handleAddTime,
   ]);
 
+
   useEffect(() => {
     if (start) {
-      let isDeleteProcessPrimeiro = deleteProcessPrimeiro;
-
       remindsTimeFromRound = setInterval(() => {
 
-        if (!isDeleteProcessPrimeiro) {
-          setSecondsRound((prevTime) => prevTime + 1);
+        const prioridade = processos[secondsRound]?.prioridade;
+        const valor = prioridades[prioridade];
+
+        if (prioridade !== undefined) {
+          processos[secondsRound].tamanho = processos[secondsRound].tamanho - valor;
         }
 
-        if (processos[secondsRound]) {
-          if (processos[secondsRound].tamanho === undefined) {
-            setSecondsRound(0);
-          } else {
-            processos[secondsRound].tamanho = processos[secondsRound].tamanho - 10;
-          }
-        }
+        setSecondsRound((prevSecondsRound) => prevSecondsRound + 1);
 
-        if (secondsRound === 9) {
+        if (secondsRound == 9) {
           setSecondsRound(0);
         }
 
         processos.forEach((process) => {
           if (process.tamanho <= 0) {
-            isDeleteProcessPrimeiro = true;
+            setDeleteProcessPrimeiro(true);
           }
         });
 
-        if (isDeleteProcessPrimeiro) {
-          setDeleteProcessPrimeiro(true);
-        }
       }, 1000);
     }
     return () => clearInterval(remindsTimeFromRound);
-  }, [start, secondsRound, remindsTimeFromRound, setSecondsRound, processos, deleteProcessPrimeiro]);
+  }, [start, remindsTimeFromRound, processos, secondsRound, setDeleteProcessPrimeiro]);
 
   useEffect(() => {
     if (deleteProcessPrimeiro) {
       const processoZero = processos.find((processo) => processo.tamanho <= 0);
       if (processoZero) {
         handleRemoveProcess(processoZero.id);
-        setSecondsRound((prevTime) => prevTime - 1);
       }
       setDeleteProcessPrimeiro(false);
+      setSecondsRound((prevSecondsRound) => prevSecondsRound - 1)
     }
-  }, [deleteProcessPrimeiro, processos, handleRemoveProcess]);
-
+  }, [deleteProcessPrimeiro, setSecondsRound]);
 
   return <footer className="flex p-2 px-8 space-y-4 flex-col items-center">
-    <h2 className="text-3xl	">Escalonamento por Chaveamento Circular</h2>
+    <h2 className="text-3xl	">Fração Justa</h2>
     <p className="text-justify text-xl">
-      O escalonamento por chaveamento circular (também conhecido como Round-Robin) é um algoritmo de escalonamento de processos em um sistema operacional. Nesse algoritmo, cada processo recebe uma fatia de tempo para execução em uma ordem circular.
+      O escalonamento "fair-share" refere-se a uma abordagem em que os recursos do sistema (como CPU, memória, largura de banda de rede, entre outros) são alocados entre os usuários ou grupos de forma proporcional à sua "fração justa" ou "quota" de recursos. Isso é feito para garantir que cada usuário ou grupo receba uma parcela equitativa dos recursos disponíveis, de acordo com uma política predefinida.
     </p>
     <p className="text-justify text-xl">
-      A principal vantagem do escalonamento por chaveamento circular é que ele garante uma distribuição justa do tempo de processamento entre os processos. Cada processo recebe uma fatia igual de tempo antes de ser colocado novamente no final da fila. Isso é especialmente útil em ambientes de multiprogramação, onde vários processos estão competindo pelo tempo de CPU.
+      Em outras palavras, o escalonamento "fair-share" procura evitar que um usuário ou grupo monopolize os recursos do sistema, garantindo que todos tenham acesso justo aos recursos de acordo com sua parcela alocada.
     </p>
-  </footer>;
+
+
+  </footer >;
 }
