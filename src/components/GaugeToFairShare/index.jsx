@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Chart } from "react-google-charts";
-import { TimeContext } from "../../contexts/TimeContext";
+import { TimeContextToFairShare } from "../../contexts/TimeContextToFairShare";
 
-export function Gauge() {
-  const { processos, start, time } = useContext(TimeContext)
+export function GaugeToFairShare() {
+  const { processos, start, time } = useContext(TimeContextToFairShare)
   const [data, setData] = useState(getData);
   const options = {
     width: 400,

@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { Plus, Minus, Play, Stop, Pause, ArrowLeft } from "phosphor-react";
-import { TimeContext } from "../../contexts/TimeContext";
+import { TimeContextToFairShare } from "../../contexts/TimeContextToFairShare";
 import { NavLink } from "react-router-dom";
-import { Gauge } from "../Gauge";
+import { GaugeToFairShare } from "../GaugeToFairShare";
 
-export function Default() {
+export function DefaultToFairShare() {
   const {
     handleCreateNewCycle,
     handlePauseNewCycle,
@@ -14,12 +14,9 @@ export function Default() {
     minutes,
     processos,
     seconds,
-    isTicketTrue,
-    isLotteryIsTrue,
-    setIsLotteryIsTrue,
-    isFairShareTrue,
-    newProcessos
-  } = useContext(TimeContext);
+    isPrioritiesTrue,
+  } = useContext(TimeContextToFairShare);
+
   return (
     <>
       <main className=" flex w-full flex-col items-center  pt-4 text-2xl">
@@ -62,39 +59,36 @@ export function Default() {
           />
         </div>
 
-        <div className="flex ">
+        <div className="flex">
           <span className="px-2">Tempo: </span>{" "}
           <span>{minutes < 10 ? `0${minutes}` : minutes}</span>:
           <span>{seconds < 10 ? `0${seconds}` : seconds}</span>
           <div className="px-4">processos: {processos.length}</div>
         </div>
       </main>
-      <Gauge />
+      <GaugeToFairShare />
       <div className="mt-10 flex">
 
         {processos.map((processo) => {
+          const isMultiploDeDois = processo.id % 2 === 0;
+          const corFundo = isMultiploDeDois ? 'bg-red-500' : 'bg-[#1da1f2]';
+
           return (
             <div className="flex flex-col" key={processo.id}>
-              {isTicketTrue ? (
-                <p className="divide-x border-2 ml-1 border-[#065086] text-center text-red-600 pr-1">
+              {isPrioritiesTrue ? (
+                <p className={`"divide-x border-2 ml-1 border-[#065086] text-center text-red-600 pr-1`}>
                   {processo.prioridade}
                 </p>
               ) : (
                 ""
               )}
-              {
-                isTicketTrue && isLotteryIsTrue ? (
-                  <p className="divide-x border-2 ml-1 border-[#065086] text-center text-red-600 pr-1 mt-2">
-                    {processo.ticket}
-                  </p>
-                ) : ("")
 
-              }
               <span className="text-center">{processo.id}</span>
               <section className="h-96 flex-row gap-5 px-10">
                 <div className="h-full rounded-full bg-gray-200 dark:bg-gray-700 ">
+
                   <div
-                    className="rounded-full bg-[#1da1f2] px-3  leading-none"
+                    className={`rounded-full ${corFundo} px-3  leading-none`}
                     style={{ height: `${processo.tamanho}%` }}
                   >
                     <div className="p-0.5 pt-2.5 text-base font-semibold text-blue-100 ">
@@ -107,33 +101,17 @@ export function Default() {
           );
         })}
 
-        <div className="flex flex-col">
-          {isTicketTrue ?
-            <span className="text-base">
-              <ArrowLeft
-                size={28}
-                color="#1da1f2"
-                weight="light"
-                className="mx-3 inline"
-              />
-              Ordem de prioridade
-            </span>
-            :
-            ""
-          }
-          {
-            isLotteryIsTrue && isTicketTrue ?
-              <span className="text-base mt-2">
-                <ArrowLeft
-                  size={28}
-                  color="#1da1f2"
-                  weight="light"
-                  className="mx-3 inline"
-                />
-                Tickets
-              </span> : ""
-          }
 
+        <div className="flex flex-col">
+          <span className="text-base">
+            <ArrowLeft
+              size={28}
+              color="#1da1f2"
+              weight="light"
+              className="mx-3 inline"
+            />
+            Ordem de prioridade
+          </span>
         </div>
       </div >
       <nav className="mt-6 flex justify-center gap-3">

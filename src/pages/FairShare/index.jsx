@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useContext } from "react";
+import { TimeContextToFairShare } from "../../contexts/TimeContextToFairShare";
 import { TimeContext } from "../../contexts/TimeContext";
 
 export function FairShare() {
@@ -9,14 +10,10 @@ export function FairShare() {
     handleAddTime,
     handleRemoveTime,
     processos,
-    time,
-    setIsTicketTrue,
-    setIsLotteryIsTrue,
-    setIsFairShareTrue
-  } = useContext(TimeContext);
-
+    time
+  } = useContext(TimeContextToFairShare);
+  const { setIsFairShareTrue } = useContext(TimeContext)
   const [deleteProcessPrimeiro, setDeleteProcessPrimeiro] = useState(false);
-
   const [secondsRound, setSecondsRound] = useState(0);
   const prioridades = {
     4: 20,
@@ -24,15 +21,13 @@ export function FairShare() {
     2: 10,
     1: 5,
   };
-  useEffect(() => {
-    setIsTicketTrue(true);
-    setIsLotteryIsTrue(false)
-    setIsFairShareTrue(true)
-  }, []);
-
   let remindsHeightProcess;
   let remindsTimeFromRound;
 
+
+  useEffect(() => {
+    setIsFairShareTrue(true)
+  }, []);
 
   useEffect(() => {
     if (start) {

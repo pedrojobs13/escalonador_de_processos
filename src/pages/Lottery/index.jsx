@@ -43,9 +43,7 @@ export function Lottery() {
   useEffect(() => {
 
     index = processos.findIndex((x) => x.prioridade === lottery);
-    console.log("prioridade selecionada: " + lottery)
-    console.log("numero sorteado: " + sortNumber)
-    console.log("index do número sorteado: " + index)
+
     if (index == -1) {
 
       setSortNumber(Math.floor(Math.random() * (max - min) + min))

@@ -151,7 +151,8 @@ export function TimeContextProvider({ children }) {
       return processIdDuplicate.indexOf(item) != idx;
     });
 
-    if (processos.length < 10 && !isDuplicate) {
+
+    if (processos.length < 10 && !isDuplicate && !isFairShareTrue) {
       setGetPrioridade(Calcprioridade())
       const newProcess = {
         id: processos.findLast((element) => element.id).id + 1,
@@ -161,6 +162,7 @@ export function TimeContextProvider({ children }) {
       };
       setProcessos((state) => [...state, newProcess]);
     }
+
     // número aletório pra caso de merda -> Math.floor(Math.random() * 65536);
 
     //sempre lembrar de clousore
